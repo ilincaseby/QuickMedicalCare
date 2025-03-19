@@ -1,0 +1,8 @@
+*.bin
+NLP/venv/
+NLP/transformer/results/
+NLP/transformer/tinybert_symptoms_classifier/
+NLP/transformer/tinybert_symptoms_classifier_tokenizer/
+NLP/vsm/GoogleNews-vectors-negative300.bin
+MLTraining/venv/
+MLTraining/huggingface_dataset

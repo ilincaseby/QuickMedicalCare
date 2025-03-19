@@ -1,0 +1,8 @@
+Nume: QuickCare
+
+Descriere succinta:
+
+Proiectul consta intr-o aplicatie multi-platform(iOS, Android, Web) prin care oameni din intreaga lume isi
+pot afla rapid un posibil diagnostic pe baza simptomelor intampinate, diagnostic prezis cu ajutorul
+inteligentei artificiale.
+Clientii pot descrie simptomele intr-un limbaj natural, fiind intelese de aplicatie.
