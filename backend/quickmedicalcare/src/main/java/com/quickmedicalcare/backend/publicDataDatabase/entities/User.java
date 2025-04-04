@@ -14,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

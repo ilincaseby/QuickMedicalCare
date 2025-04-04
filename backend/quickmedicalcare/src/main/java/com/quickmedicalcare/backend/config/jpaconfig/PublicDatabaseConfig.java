@@ -1,6 +1,7 @@
 package com.quickmedicalcare.backend.config.jpaconfig;
 
 import jakarta.persistence.EntityManagerFactory;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -38,10 +39,15 @@ public class PublicDatabaseConfig {
     public LocalContainerEntityManagerFactoryBean publicEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
             @Qualifier("publicDataSource") DataSource publicDataSource) {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+//        properties.put("hibernate.show_sql", "true");
         return builder
                 .dataSource(publicDataSource)
                 .packages("com.quickmedicalcare.backend.publicDataDatabase.entities")
                 .persistenceUnit("public")
+                .properties(properties)
                 .build();
     }
 

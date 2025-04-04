@@ -15,6 +15,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
@@ -24,26 +26,28 @@ import javax.sql.DataSource;
         transactionManagerRef = "userPatientDataCorrelationTransactionManager"
 )
 public class UserPatientDataCorrelationDatabaseConfig {
-    @Primary
     @Bean(name = "userCorrelationDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.correlation")
     public DataSource medicalHistoryDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Primary
     @Bean(name = "userPatientDataCorrelationEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean medicalHistoryEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
             @Qualifier("userCorrelationDataSource") DataSource medicalHistoryDataSource) {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+//        properties.put("hibernate.show_sql", "true");
         return builder
                 .dataSource(medicalHistoryDataSource)
                 .packages("com.quickmedicalcare.backend.correlationDataDatabase.entities")
                 .persistenceUnit("public")
+                .properties(properties)
                 .build();
     }
 
-    @Primary
     @Bean(name = "userPatientDataCorrelationTransactionManager")
     public PlatformTransactionManager medicalHistoryTransactionManager(
             @Qualifier("userPatientDataCorrelationEntityManagerFactory") EntityManagerFactory medicalHistoryEntityManagerFactory) {

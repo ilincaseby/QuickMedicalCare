@@ -7,6 +7,8 @@ import nltk
 from gensim.models import KeyedVectors
 import string
 
+app = Flask(__name__)
+
 def import_vsm():
     vectorized_symptoms = np.load('vsm_dict.npy', allow_pickle=True).item()
     return vectorized_symptoms
@@ -83,21 +85,24 @@ def best_cosine_similarity(vectorized_symptoms: dict, sentence: str, model: Keye
         return None
     return best_symptom
 
+@app.route('/classify', methods=['POST'])
+def classify():
+    data = request.get_json(force=True)
+    print(data)
+    message = data['message']
+    messages = message.split('.')
+    response = []
+    for msg in messages:
+        res = best_cosine_similarity(vectorized_symptoms, msg, model)
+        if res is not None:
+            response.append(res)
+    print(response)
+    return jsonify({'response': response})
+
 if __name__=='__main__':
     vectorized_symptoms = import_vsm()
     wdl = WordNetLemmatizer()
     medical_stopwords = get_stopwords()
     model = KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin', binary=True)
-    app = Flask(__name__)
-    @app.route('/classify', methods=['GET'])
-    def classify():
-        data = request.get_json(force=True)
-        message = data['message']
-        messages = message.split('.')
-        response = []
-        for msg in messages:
-            res = best_cosine_similarity(vectorized_symptoms, msg, model)
-            if res is not None:
-                response.append(res)
-        return jsonify({'response': response})
+    
     app.run(port=5002)

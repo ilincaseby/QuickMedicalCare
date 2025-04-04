@@ -11,7 +11,7 @@ public class TestController {
 
     @GetMapping("/sayHelloToMe")
     public String sayHelloToMe() {
-        System.out.println("Hello World");
-        return "Hello!";
+        //System.out.println("Hello World");
+        return "Hell!";
     }
 }
