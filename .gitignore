@@ -5,4 +5,10 @@ NLP/transformer/tinybert_symptoms_classifier/
 NLP/transformer/tinybert_symptoms_classifier_tokenizer/
 NLP/vsm/GoogleNews-vectors-negative300.bin
 MLTraining/venv/
-MLTraining/huggingface_dataset
+MLTraining/tf_macos_venv/
+MLTraining/big_dataset/huggingface_dataset/
+MLTraining/big_dataset/preprocessed_dataset/
+MLTraining/small_dataset/lrPrognosisModel.joblib
+MLTraining/small_dataset/mlpPrognosisModel.joblib
+MLTraining/small_dataset/svdPrognosisModel.joblib
+MLTraining/small_dataset/xgbPrognosisModel.joblib

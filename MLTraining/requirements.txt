@@ -5,3 +5,5 @@ scikit-learn
 matplotlib
 flask
 joblib
+tensorflow-metal
+tensorflow-macos
