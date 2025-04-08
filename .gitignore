@@ -8,6 +8,7 @@ MLTraining/venv/
 MLTraining/tf_macos_venv/
 MLTraining/big_dataset/huggingface_dataset/
 MLTraining/big_dataset/preprocessed_dataset/
+MLTraining/big_dataset/saved_models/
 MLTraining/small_dataset/lrPrognosisModel.joblib
 MLTraining/small_dataset/mlpPrognosisModel.joblib
 MLTraining/small_dataset/svdPrognosisModel.joblib
