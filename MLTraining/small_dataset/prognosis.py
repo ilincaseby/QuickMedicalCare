@@ -44,4 +44,4 @@ if __name__ == "__main__":
     with open("diseases_index_encoding.json", "r") as f:
         disease_encoding = json.load(f)
     
-    app.run(port=5005)
+    app.run(host='0.0.0.0', port=5013)
