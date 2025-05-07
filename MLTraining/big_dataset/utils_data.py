@@ -6,13 +6,14 @@ sex = 'SEX'
 age = 'AGE'
 m = 'M'
 f = 'F'
-scaler_path = "saved_models/age_scaler"
-saved_models_dir = "saved_models"
-dir_preprocessed_dataset = "preprocessed_dataset"
+scaler_path = 'saved_models/age_scaler'
+saved_models_dir = 'saved_models'
+dir_preprocessed_dataset = 'preprocessed_dataset'
+joblib_extension = '.joblib'
 
 def obtain_evidences():
-    with open("huggingface_dataset/ddxplus/release_evidences.json", "r") as f:
-        release_evidences = json.load(f)
+    with open("huggingface_dataset/ddxplus/release_evidences.json", "r") as file:
+        release_evidences = json.load(file)
     set_evidences = []
     for key, value in release_evidences.items():
         if len(value['possible-values']) > 0:
@@ -30,8 +31,8 @@ def obtain_evidences_as_dict():
     return evidences_dict
 
 def obtain_conditions():
-    with open("huggingface_dataset/ddxplus/release_conditions.json") as f:
-        release_conditions = json.load(f)
+    with open("huggingface_dataset/ddxplus/release_conditions.json") as file:
+        release_conditions = json.load(file)
     return [a for a in release_conditions.keys()]
 
 def obtain_conditions_as_dict():
@@ -49,8 +50,8 @@ def obtain_conditions_as_dict_index():
     return conditions_dict
 
 def obtain_general_evidences():
-    with open("huggingface_dataset/ddxplus/release_evidences.json", "r") as f:
-        release_evidences = json.load(f)
+    with open("huggingface_dataset/ddxplus/release_evidences.json", "r") as file:
+        release_evidences = json.load(file)
     set_evidences = []
     for key, _ in release_evidences.items():
         set_evidences.append(f'{key}')
@@ -59,8 +60,8 @@ def obtain_general_evidences():
 def convert_to_dict(dataframe, dictionary, set_evidences, set_conditions):
     for _, row in dataframe.iterrows():
         dict_record = {}
-        dict_record['AGE'] = row['AGE']
-        dict_record['SEX'] = row['SEX']
+        dict_record[age] = row[age]
+        dict_record[sex] = row[sex]
         evidences_string = row['EVIDENCES']
         evidences_parts = ast.literal_eval(evidences_string)
         differential_diagnosis_string = row['DIFFERENTIAL_DIAGNOSIS']
@@ -83,8 +84,8 @@ def convert_to_dict(dataframe, dictionary, set_evidences, set_conditions):
 def convert_to_dict_non_diff(dataframe, dictionary, set_evidences, set_conditions):
     for _, row in dataframe.iterrows():
         dict_record = {}
-        dict_record['AGE'] = row['AGE']
-        dict_record['SEX'] = row['SEX']
+        dict_record[age] = row[age]
+        dict_record[sex] = row[sex]
         evidences_string = row['EVIDENCES']
         evidences_parts = ast.literal_eval(evidences_string)
         differential_diagnosis_string = row['PATHOLOGY']
@@ -109,6 +110,6 @@ def introduce_evidences(evidences, dict_for_insert):
         dict_for_insert[evidence] = []
 
 def get_json_from_file(filepath):
-    with open(filepath, "r") as f:
-        release_evidences = json.load(f)
+    with open(filepath, "r") as file:
+        release_evidences = json.load(file)
     return release_evidences

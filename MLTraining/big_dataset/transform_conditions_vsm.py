@@ -8,7 +8,7 @@ import re
 import json
 import os
 import joblib
-from utils_data import scaler_path, saved_models_dir
+from utils_data import scaler_path, saved_models_dir, joblib_extension, sex, m, f, age
 
 # Load conditions and evidences
 conditions = obtain_conditions()
@@ -16,24 +16,24 @@ general_evidences = obtain_general_evidences()
 
 # Load dataset
 df = pd.read_csv("huggingface_dataset/ddxplus/train.csv")
-df['SEX'] = df['SEX'].map({'M': 1, 'F': 0})
+df[sex] = df[sex].map({m: 1, f: 0})
 if not os.path.isdir(saved_models_dir):
     os.makedirs(saved_models_dir)
-if os.path.exists(scaler_path + ".joblib"):
-    min_max_scaler = joblib.load(scaler_path + ".joblib")
+if os.path.exists(scaler_path + joblib_extension):
+    min_max_scaler = joblib.load(scaler_path + joblib_extension)
 else:
     min_max_scaler = MinMaxScaler()
-    min_max_scaler.fit(df[['AGE']])
-    joblib.dump(min_max_scaler, scaler_path + ".joblib")
+    min_max_scaler.fit(df[[age]])
+    joblib.dump(min_max_scaler, scaler_path + joblib_extension)
 
-df['AGE'] = min_max_scaler.transform(df[['AGE']])
+df[age] = min_max_scaler.transform(df[[age]])
 
 
 # Initialize condition vector dictionary
 condition_vector_dict = {condition: (np.zeros(len(general_evidences)), 0) for condition in conditions}
 
 # Compile regex pattern for evidence processing
-pattern = re.compile('_@_[a-zA-Z0-9_]*')
+pattern = re.compile('_@_\\w*')
 
 # Create a dictionary for evidence indexing
 evidence_dict = {general_evidences[i]: i for i in range(len(general_evidences))}
@@ -69,5 +69,5 @@ condition_vector_dict_serializable = {
 }
 
 # Save to file
-with open("saved_models/condition_embeddings.json", "w") as f:
-    json.dump(condition_vector_dict_serializable, f)
+with open("saved_models/condition_embeddings.json", "w") as file:
+    json.dump(condition_vector_dict_serializable, file)

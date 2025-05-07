@@ -8,6 +8,15 @@ from utils_data import obtain_evidences, sex, m, f, scaler_path, age, saved_mode
 import utils_data
 import joblib
 
+
+
+"""
+Accuracy: 0.9832
+F1-score: 0.9779
+Precision: 0.9750
+Recall: 0.9832
+"""
+
 train_set_path = os.getenv('TRAIN_SET', default='preprocessed_dataset/preprocessed_train_non_diff.csv')
 test_set_path = os.getenv('TEST_SET', default='preprocessed_dataset/preprocessed_test_non_diff.csv')
 validate_set_path = os.getenv('TEST_SET', default='preprocessed_dataset/preprocessed_validate_non_diff.csv')
@@ -21,7 +30,7 @@ def obtain_data(path):
         min_max_scaler = joblib.load(scaler_path + ".joblib")
     else:
         min_max_scaler = MinMaxScaler()
-        min_max_scaler.fit(df[['AGE']])
+        min_max_scaler.fit(df[[age]])
         joblib.dump(min_max_scaler, scaler_path + '.joblib')
     df[age] = min_max_scaler.transform(df[[age]])
     features = [age, sex] + utils_data.obtain_evidences()
@@ -30,7 +39,7 @@ def obtain_data(path):
     Y = df[labels].values
     return X, Y, len(features), len(labels)
 
-def model_initializer(input_dim, output_dim, metrics, X, Y, epochs=10, batch_size=32):
+def model_initializer(input_dim, output_dim, metrics, x, y, epochs=10, batch_size=32):
     model = tf.keras.models.Sequential([
             tf.keras.layers.Input(shape=(input_dim,), name='Input'),
     
@@ -57,21 +66,17 @@ def model_initializer(input_dim, output_dim, metrics, X, Y, epochs=10, batch_siz
         loss = tf.keras.losses.BinaryCrossentropy(), metrics=metrics
     )
     model.fit(
-        X, Y,
+        x, y,
         epochs=epochs,
         batch_size=batch_size
     )
     return model
 
 def test_model(model, test_path):
-    X_test, Y_test, _, _ = obtain_data(test_path)
-    y_true = np.argmax(Y_test, axis=1)
-    y_pred = np.argmax(model.predict(X_test), axis=1)
+    x_test, y_test, _, _ = obtain_data(test_path)
+    y_true = np.argmax(y_test, axis=1)
+    y_pred = np.argmax(model.predict(x_test), axis=1)
     accuracy = accuracy_score(y_true, y_pred)
-    # Accuracy: 0.9832
-    # F1-score: 0.9779
-    # Precision: 0.9750
-    # Recall: 0.9832
 
     f1 = f1_score(y_true, y_pred, average='weighted')
     precision = precision_score(y_true, y_pred, average='weighted')

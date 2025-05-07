@@ -3,7 +3,7 @@ from tarfile import data_filter
 import pandas as pd
 import os
 import utils_data
-from utils_data import dir_preprocessed_dataset
+from utils_data import dir_preprocessed_dataset, age, sex
 
 evidences_path = "huggingface_dataset/ddxplus/release_evidences.json"
 conditions_path = "huggingface_dataset/ddxplus/release_conditions.json"
@@ -42,12 +42,12 @@ def obtain_evidence_condition_json_list():
 
 def obtain_df_from_csv(dataset_path):
     df = pd.read_csv(dataset_path)
-    df['AGE'] = df['AGE'].fillna(df['AGE'].median())
-    df['SEX'] = df['SEX'].fillna(df['SEX'].mode()[0])
+    df[age] = df[age].fillna(df[age].median())
+    df[sex] = df[sex].fillna(df[sex].mode()[0])
     return df
 
 def obtain_dictionary(evidences, conditions):
-    dict_data = {'AGE': [], 'SEX': []}
+    dict_data = {age: [], sex: []}
     utils_data.introduce_evidences(evidences, dict_data)
     utils_data.introduce_conditions(conditions, dict_data)
     return dict_data

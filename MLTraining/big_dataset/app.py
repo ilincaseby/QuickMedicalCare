@@ -6,13 +6,13 @@ from utils_data import scaler_path, saved_models_dir
 import tensorflow as tf
 import utils_data
 from train_diff_prediction import predict_differential
-from utils_data import sex, age, m, f
+from utils_data import sex, age, m, joblib_extension
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 
-if not os.path.exists(scaler_path + '.joblib'):
+if not os.path.exists(scaler_path + joblib_extension):
     exit(1)
-min_max_scaler = joblib.load(scaler_path + '.joblib')
+min_max_scaler = joblib.load(scaler_path + joblib_extension)
 if not os.path.exists(saved_models_dir + 'neural_network_pathology.keras'):
     exit(1)
 model = tf.keras.models.load_model(saved_models_dir + 'neural_network_pathology.keras')
