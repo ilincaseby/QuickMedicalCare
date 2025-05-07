@@ -1,4 +1,6 @@
 *.bin
+*.csv
+*.pyc
 NLP/venv/
 NLP/transformer/results/
 NLP/transformer/tinybert_symptoms_classifier/
@@ -8,6 +10,8 @@ MLTraining/venv/
 MLTraining/tf_macos_venv/
 MLTraining/big_dataset/huggingface_dataset/
 MLTraining/big_dataset/preprocessed_dataset/
+MLTraining/big_dataset/__pycache__
+MLTraining/big_dataset/aux
 MLTraining/big_dataset/saved_models/
 MLTraining/small_dataset/lrPrognosisModel.joblib
 MLTraining/small_dataset/mlpPrognosisModel.joblib
