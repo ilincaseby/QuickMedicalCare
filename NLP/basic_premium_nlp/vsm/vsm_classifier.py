@@ -105,4 +105,4 @@ if __name__=='__main__':
     medical_stopwords = get_stopwords()
     model = KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin', binary=True)
     
-    app.run(port=5002)
+    app.run(host='0.0.0.0', port=5002)

@@ -2,12 +2,12 @@
 *.csv
 *.pyc
 NLP/venv/
-NLP/transformer/results/
-NLP/transformer/tinybert_symptoms_classifier/
-NLP/transformer/tinybert_symptoms_classifier_tokenizer/
-NLP/vsm/GoogleNews-vectors-negative300.bin
+NLP/basic_premium_nlp/transformer/results/
+NLP/basic_premium_nlp/transformer/tinybert_symptoms_classifier/
+NLP/basic_premium_nlp/transformer/tinybert_symptoms_classifier_tokenizer/
+NLP/basic_premium_nlp/vsm/GoogleNews-vectors-negative300.bin
 MLTraining/venv/
-MLTraining/tf_macos_venv/
+MLTraining/macos_venv/
 MLTraining/big_dataset/huggingface_dataset/
 MLTraining/big_dataset/preprocessed_dataset/
 MLTraining/big_dataset/__pycache__
