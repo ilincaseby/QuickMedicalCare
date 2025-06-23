@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quick_medical_care/utils/secure_data.dart';
+import 'package:quick_medical_care/widgets/snack_bar_check.dart';
+import 'package:quick_medical_care/widgets/snack_bar_error.dart';
+import '../utils/http_request.dart' as reqClient;
+import '../utils/models.dart' as models;
+import '../utils/secure_data.dart' as secureStorageClient;
 
 class ChangePasswordForm extends StatefulWidget {
   const ChangePasswordForm({super.key});
@@ -18,13 +24,46 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     super.dispose();
   }
 
-  void changePassword() {
-    final oldPassword = _oldPasswordController.text.trim();
-    final newPassword = _newPasswordController.text.trim();
+  void changePassword() async {
+    if (_oldPasswordController.text.isEmpty ||
+        _newPasswordController.text.isEmpty) {
+      showError(context, "Please complete fields");
+      return;
+    }
 
-    // TODO: implementează logica de schimbare a parolei aici
-    print('Old Password: $oldPassword');
-    print('New Password: $newPassword');
+    var reqBody = {
+      "oldPassword": _oldPasswordController.text,
+      "password": _newPasswordController.text,
+    };
+
+    var antiCsrfToken = await secureStorageClient.get("antiCsrfToken");
+    var accessToken = await secureStorageClient.get("access-token");
+    reqClient
+        .request(
+      models.RequestMethod.put,
+      "/api/v1/changeInfo/changePassword",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": antiCsrfToken,
+        "Authorization": "Bearer ${accessToken ?? ''}",
+      },
+      body: reqBody,
+      onlyText: true,
+    )
+        .then((response) {
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        showCheck(context, "Password changed successfully");
+        Navigator.pop(context);
+        return;
+      }
+      String? errorMsg = response.errorBody;
+      if (errorMsg == null || errorMsg.toString().isEmpty) {
+        errorMsg = "Something went wrong";
+      }
+      showError(context, errorMsg);
+    }).catchError((error) {
+      showError(context, "Something went wrong");
+    });
   }
 
   @override

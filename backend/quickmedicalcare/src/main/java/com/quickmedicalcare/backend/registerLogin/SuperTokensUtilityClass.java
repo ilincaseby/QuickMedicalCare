@@ -123,7 +123,7 @@ public class SuperTokensUtilityClass implements SuperTokensInterface {
                     return new TokenCodeClass(status, userId);
                 }
             }
-            return new TokenCodeClass(status, null);
+            return new TokenCodeClass(400, null);
         } catch (Exception e) {
             e.printStackTrace();
             return new TokenCodeClass(HttpStatus.INTERNAL_SERVER_ERROR.value(), null);

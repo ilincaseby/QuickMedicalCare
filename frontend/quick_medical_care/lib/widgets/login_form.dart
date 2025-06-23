@@ -84,7 +84,7 @@ class _LoginFormState extends State<LoginForm> {
       int code = response.statusCode;
       String failedMessage = code == 403
           ? "Wrong credentials, please try again"
-          : "Something went wrong, code: $code";
+          : "${response.errorBody}, code: $code";
       showError(context, failedMessage);
     }).catchError((error) {
       showError(context, "Something went wrong");

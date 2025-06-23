@@ -24,7 +24,7 @@ class RegisterPage extends StatelessWidget {
           children: [
             const Spacer(),
             const LoginHeader(),
-            const SizedBox(height: 40),
+            const SizedBox(height: 10),
             RegisterForm(),
             const Spacer(),
             // const LoginFooter(),

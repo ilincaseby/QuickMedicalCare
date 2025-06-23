@@ -24,7 +24,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final _heightController = TextEditingController();
   final _countryController = TextEditingController();
 
-  int _sex = 0;
+  int _sex = 1;
   bool _smoker = false;
   int _alcoholConsumptionFreq = 0;
 

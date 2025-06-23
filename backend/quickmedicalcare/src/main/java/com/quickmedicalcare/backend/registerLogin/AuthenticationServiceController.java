@@ -50,8 +50,11 @@ public class AuthenticationServiceController {
     public ResponseEntity<?> loginUser(@RequestBody LoginPayload loginPayload) throws IOException {
         loginPayload.setPassword(passwordEncryptor.encryptPassword(loginPayload.getPassword()));
         SuperTokensUtilityClass.TokenCodeClass tokenCodeClass = superTokensAPI.login(loginPayload.getEmail(), loginPayload.getPassword());
+        if (tokenCodeClass.getCode() == HttpStatus.BAD_REQUEST.value()) {
+            return new ResponseEntity<>("Wrong credentials", HttpStatus.BAD_REQUEST);
+        }
         if (tokenCodeClass.getCode() != HttpStatus.OK.value()) {
-            return new ResponseEntity<>("Login failed", HttpStatus.valueOf(tokenCodeClass.getCode()));
+            return new ResponseEntity<>("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         SuperTokensUtilityClass.TokenClass tokens = superTokensAPI.getToken(tokenCodeClass.getUser_id());
 //        HttpHeaders headers = addCookies(Map.of("access-token", tokens.getAccessToken(),

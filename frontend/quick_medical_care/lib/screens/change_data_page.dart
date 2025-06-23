@@ -25,7 +25,7 @@ class ChangeDataPage extends StatelessWidget {
           children: [
             const Spacer(),
             const LoginHeader(),
-            const SizedBox(height: 40),
+            const SizedBox(height: 10),
             ChangePersonalDataForm(isDoctor: false),
             const Spacer(),
             // const LoginFooter(),

@@ -82,6 +82,9 @@ public class ChangeInfoController {
         if (user == null) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
+        if (!user.getPassword().equals(changeInfoPayload.getOldPassword())) {
+            return new ResponseEntity<>("Old password does not match", HttpStatus.BAD_REQUEST);
+        }
         String resetPasswordToken = superTokensAPI.getPasswordToken(userId, user.getEmail());
         if (resetPasswordToken == null || resetPasswordToken.isEmpty()) {
             return new ResponseEntity<>("Reset password token not provided", HttpStatus.BAD_REQUEST);
