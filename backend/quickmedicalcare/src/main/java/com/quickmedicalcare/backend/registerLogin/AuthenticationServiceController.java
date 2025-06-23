@@ -2,20 +2,19 @@ package com.quickmedicalcare.backend.registerLogin;
 
 import com.quickmedicalcare.backend.config.Roles;
 import com.quickmedicalcare.backend.config.securityConfig.PasswordEncryptor;
-import com.quickmedicalcare.backend.correlationDataDatabase.services.UserPatientDataCorrelationService;
-import com.quickmedicalcare.backend.medicalDataDatabase.services.PatientDataService;
-import com.quickmedicalcare.backend.prognosisPackage.PrognosisPayload;
+import com.quickmedicalcare.backend.correlationDataDatabase.services.UserDataCorrelationService;
+import com.quickmedicalcare.backend.medicalDataDatabase.services.UserPrivateDataService;
 import com.quickmedicalcare.backend.prognosisPackage.SuperTokensPrognosisInterface;
 import com.quickmedicalcare.backend.publicDataDatabase.services.UserService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +25,10 @@ public class AuthenticationServiceController {
 
     private SuperTokensInterface superTokensAPI;
     private UserService userService;
-    private PatientDataService patientDataService;
-    private UserPatientDataCorrelationService userPatientDataCorrelationService;
+    private UserPrivateDataService patientDataService;
+    private UserDataCorrelationService userPatientDataCorrelationService;
     private PasswordEncryptor passwordEncryptor;
-    SuperTokensPrognosisInterface roleGetter;
+    private final SuperTokensPrognosisInterface roleGetter;
 
     @PostMapping("/register")
     @Transactional
@@ -55,10 +54,20 @@ public class AuthenticationServiceController {
             return new ResponseEntity<>("Login failed", HttpStatus.valueOf(tokenCodeClass.getCode()));
         }
         SuperTokensUtilityClass.TokenClass tokens = superTokensAPI.getToken(tokenCodeClass.getUser_id());
-        HttpHeaders headers = addCookies(Map.of("access-token", tokens.getAccessToken(),
+//        HttpHeaders headers = addCookies(Map.of("access-token", tokens.getAccessToken(),
+//                "refresh-token", tokens.getRefreshToken(), "antiCsrfToken",
+//                tokens.getRefreshToken()), tokens.getExpiresIn());
+        List<Roles> userRoles = roleGetter.getUserRoles(tokenCodeClass.getUser_id());
+        userRoles.sort(Comparator.comparingInt(Roles::getPriority));
+        if (userRoles.isEmpty()) {
+            return new ResponseEntity<>("User role not found", HttpStatus.NOT_FOUND);
+        }
+        Roles userRole = userRoles.get(userRoles.size() - 1);
+
+        return ResponseEntity.ok().body(Map.of("access-token", tokens.getAccessToken(),
                 "refresh-token", tokens.getRefreshToken(), "antiCsrfToken",
-                tokens.getRefreshToken()), tokens.getExpiresIn());
-        return new ResponseEntity<>("User logged in", headers, HttpStatus.OK);
+                tokens.getRefreshToken(), "role", userRole.toString()));
+//        return new ResponseEntity<>("User logged in", headers, HttpStatus.OK);
     }
 
     @PutMapping("/upgrade")

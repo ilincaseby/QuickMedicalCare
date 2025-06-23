@@ -29,7 +29,9 @@ public class SuperTokensFilter extends OncePerRequestFilter {
             String antiCsrfToken = request.getHeader("X-CSRF-TOKEN");
             if (token != null && antiCsrfToken != null) {
                 token = token.replace("Bearer ", "");
+                System.out.println(token);
                 String userId = superTokensAPI.obtainAccess(token, antiCsrfToken);
+                System.out.println(userId);
                 if (!userId.isEmpty()) {
                     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>()));
                 }

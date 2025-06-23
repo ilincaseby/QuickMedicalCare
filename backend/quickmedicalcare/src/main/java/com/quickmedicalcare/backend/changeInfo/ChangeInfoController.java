@@ -1,21 +1,24 @@
 package com.quickmedicalcare.backend.changeInfo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.quickmedicalcare.backend.config.Roles;
 import com.quickmedicalcare.backend.config.securityConfig.PasswordEncryptor;
+import com.quickmedicalcare.backend.correlationDataDatabase.services.UserDataCorrelationService;
+import com.quickmedicalcare.backend.medicalDataDatabase.entities.UserPrivateData;
+import com.quickmedicalcare.backend.medicalDataDatabase.services.UserPrivateDataService;
+import com.quickmedicalcare.backend.prognosisPackage.SuperTokensPrognosisInterface;
 import com.quickmedicalcare.backend.publicDataDatabase.entities.User;
 import com.quickmedicalcare.backend.publicDataDatabase.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.*;
 
 @AllArgsConstructor
 @RestController
@@ -23,8 +26,45 @@ import java.io.IOException;
 public class ChangeInfoController {
 
     private SuperTokensResetPasswordInterface superTokensAPI;
+    private final SuperTokensPrognosisInterface superTokensPrognosis;
+    private final UserDataCorrelationService userPatientDataCorrelationService;
+    private final UserPrivateDataService userPrivateDataService;
     private PasswordEncryptor passwordEncryptor;
     private UserService userService;
+
+    @GetMapping("/getUserDetails")
+    public ResponseEntity<?> getUserDetails() throws JsonProcessingException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserIdSuperTokens(auth.getName());
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        long privateDataId = userPatientDataCorrelationService.getUserPrivateDataId(user.getId());
+        UserPrivateData userPrivateData = userPrivateDataService.getPatientById(privateDataId);
+        if (userPrivateData == null) {
+            return new ResponseEntity<>("Private data not found", HttpStatus.NOT_FOUND);
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("User general data", user);
+        result.put("Private data", userPrivateData);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/getRole")
+    public ResponseEntity<?> getUserRole() throws IOException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserIdSuperTokens(auth.getName());
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+        List<Roles> userRoles = superTokensPrognosis.getUserRoles(SecurityContextHolder
+                .getContext().getAuthentication().getName());
+        List<Roles> mutableRoles = new ArrayList<>(userRoles);
+        mutableRoles.sort(Comparator.comparingInt(Roles::getPriority));
+        Roles userRole = mutableRoles.get(userRoles.size() - 1);
+        return ResponseEntity.ok(userRole);
+    }
 
     @PutMapping("/changePassword")
     @Transactional

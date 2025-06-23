@@ -1,5 +1,6 @@
 package com.quickmedicalcare.backend.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.quickmedicalcare.backend.prognosisPackage.PrognosisPayload;
 import com.quickmedicalcare.backend.prognosisPackage.roleVisitor.RoleVisitor;
 import lombok.Getter;
@@ -11,26 +12,26 @@ import java.util.Map;
 public enum Roles {
     ROLE_ADMIN(5) {
         @Override
-        public Map<String, Double> accept(RoleVisitor roleVisitor, PrognosisPayload payload) throws IOException {
+        public JsonNode accept(RoleVisitor roleVisitor, PrognosisPayload payload, int age, String sex) throws IOException {
             return roleVisitor.prognosisAsPremium(payload);
         }
     },
     ROLE_USER_BASIC(1) {
         @Override
-        public Map<String, Double> accept(RoleVisitor roleVisitor, PrognosisPayload payload) throws IOException {
+        public JsonNode accept(RoleVisitor roleVisitor, PrognosisPayload payload, int age, String sex) throws IOException {
             return roleVisitor.prognosisAsBasic(payload);
         }
     },
     ROLE_USER_PREMIUM(2) {
         @Override
-        public Map<String, Double> accept(RoleVisitor roleVisitor, PrognosisPayload payload) throws IOException {
+        public JsonNode accept(RoleVisitor roleVisitor, PrognosisPayload payload, int age, String sex) throws IOException {
             return roleVisitor.prognosisAsPremium(payload);
         }
     },
     ROLE_DOCTOR(3) {
         @Override
-        public Map<String, Double> accept(RoleVisitor roleVisitor, PrognosisPayload payload) throws IOException {
-            return roleVisitor.prognosisAsDoctor(payload);
+        public JsonNode accept(RoleVisitor roleVisitor, PrognosisPayload payload, int age, String sex) throws IOException {
+            return roleVisitor.prognosisAsDoctor(payload, age, sex);
         }
     };
 
@@ -49,7 +50,7 @@ public enum Roles {
         return null;
     }
 
-    public abstract Map<String, Double> accept(RoleVisitor visitor, PrognosisPayload prognosisPayload) throws IOException;
+    public abstract JsonNode accept(RoleVisitor visitor, PrognosisPayload prognosisPayload, int age, String sex) throws IOException;
 }
 
 

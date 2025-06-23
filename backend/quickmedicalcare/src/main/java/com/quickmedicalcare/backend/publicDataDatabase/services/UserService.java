@@ -1,28 +1,18 @@
 package com.quickmedicalcare.backend.publicDataDatabase.services;
 
 import com.quickmedicalcare.backend.changeInfo.ChangeInfoPayload;
-import com.quickmedicalcare.backend.correlationDataDatabase.services.UserPatientDataCorrelationService;
+import com.quickmedicalcare.backend.correlationDataDatabase.services.UserDataCorrelationService;
 import com.quickmedicalcare.backend.registerLogin.RegisterPayload;
 import com.quickmedicalcare.backend.publicDataDatabase.entities.User;
 import com.quickmedicalcare.backend.publicDataDatabase.repositories.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Service
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserPatientDataCorrelationService userPatientDataCorrelationService;
+    private final UserDataCorrelationService userPatientDataCorrelationService;
 
     public boolean userExists(String username, String email) {
         return userRepository.existsByEmail(email) || userRepository.existsByUsername(username);

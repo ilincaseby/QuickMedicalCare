@@ -64,7 +64,7 @@ def predict_differential(x):
     for item in x:
         diff_conditions_for_x = compute_differential_cosine_method(item[2:], 0.7)
         if len(diff_conditions_for_x) < 2:
-            diff_conditions_for_x = compute_differential_cosine_method(item[2:], 0.55)
+            diff_conditions_for_x = compute_differential_cosine_method(item[2:], 0.2)
         list_conditions = [(key, val) for key, val in diff_conditions_for_x.items()]
         most_matching_conditions = sorted(list_conditions, key= lambda a: a[1], reverse=True)[:min(5, len(list_conditions))]
         total = sum([element[1] for element in most_matching_conditions])

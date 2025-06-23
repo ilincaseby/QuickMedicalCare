@@ -12,8 +12,9 @@ def obtain_prognosis():
     symptoms = data["symptoms"]
     symptoms_arr = np.zeros(len(symptoms_encoding))
     for symptom in symptoms:
-        index = symptoms_encoding[symptom]
-        symptoms_arr[index] = 1
+        if symptom in symptoms_encoding:
+            index = symptoms_encoding[symptom]
+            symptoms_arr[index] = 1
     symptoms_arr = symptoms_arr.reshape(1, -1)
     result = model.predict_proba(symptoms_arr)
     index_disease = -1

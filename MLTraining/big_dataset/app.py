@@ -1,5 +1,4 @@
 import os
-import flask
 from flask import Flask, request, jsonify
 import joblib
 from utils_data import scaler_path, saved_models_dir
@@ -24,7 +23,7 @@ conditions_dict_index = utils_data.obtain_conditions_as_dict_index()
 
 app = Flask(__name__)
 
-@app.route('/obtain-condition')
+@app.route('/prognosis', methods=["POST"])
 def obtain_conditions():
     data = request.get_json(force=True)
     patient_evidences = data['symptoms']
@@ -32,14 +31,17 @@ def obtain_conditions():
     patient_age = data[age]
     patient_age = min_max_scaler.transform([[patient_age]])[0][0]
     patient_features = np.zeros(2 + len(evidences))
+    # minmaxscaler
     patient_features[0] = patient_age
     patient_features[1] = patient_sex
     for patient_evidence in patient_evidences:
-        patient_features[evidences_dict[patient_evidence]] = 1
-    y_pred = np.argmax(model.predict(np.array(patient_features)))[0]
+        if patient_evidence in evidences_dict:
+            patient_features[evidences_dict[patient_evidence]] = 1
+    # y_pred = np.argmax(model.predict(np.array(patient_features)))[0]
+    y_pred = np.argmax(model.predict(np.array([patient_features])), axis=1)[0]
     diagnosis = conditions_dict_index[y_pred]
-    differential_diagnosis = predict_differential(np.array(patient_features))[0]
-    return jsonify({'diagnosis': diagnosis, 'differential_doagnosis': differential_diagnosis})
+    differential_diagnosis = predict_differential(np.array([patient_features]))[0]
+    return jsonify({'diagnosis': diagnosis, 'differential_diagnosis': differential_diagnosis})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5014)

@@ -1,0 +1,15 @@
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.AssemblyInfoInputs.cache
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.AssemblyInfo.cs
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.csproj.CoreCompileInputs.cache
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.sourcelink.json
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/bin/Debug/net9.0/CountTo1B
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/bin/Debug/net9.0/CountTo1B.deps.json
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/bin/Debug/net9.0/CountTo1B.runtimeconfig.json
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/bin/Debug/net9.0/CountTo1B.dll
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/bin/Debug/net9.0/CountTo1B.pdb
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.dll
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/refint/CountTo1B.dll
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.pdb
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/CountTo1B.genruntimeconfig.cache
+/Users/sebi/Desktop/licenta/performance_tests/backends/CountTo1B/obj/Debug/net9.0/ref/CountTo1B.dll

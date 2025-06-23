@@ -7,7 +7,7 @@ age = 'AGE'
 m = 'M'
 f = 'F'
 scaler_path = 'saved_models/age_scaler'
-saved_models_dir = 'saved_models'
+saved_models_dir = 'saved_models/'
 dir_preprocessed_dataset = 'preprocessed_dataset'
 joblib_extension = '.joblib'
 

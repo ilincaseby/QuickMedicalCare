@@ -148,8 +148,10 @@ public class SuperTokensUtilityClass implements SuperTokensInterface {
                 Map.of("Content-Type", "application/json", "api_key", api_key, "rid", rid_session, "cdi-version", cdi_version),
                 POST, getInputTokens.apply(token, antiCsrfToken));
         System.out.println(getInputTokens.apply(token, antiCsrfToken));
-        System.out.println(con.getResponseCode());
         JsonNode jsonNode = obtainJsonNode(con);
+        System.out.println(jsonNode);
+        System.out.println(con.getResponseCode());
+
         System.out.println(jsonNode);
         if (con.getResponseCode() == HttpStatus.OK.value()) {
             if (jsonNode.get("status").asText().equals("OK")) {

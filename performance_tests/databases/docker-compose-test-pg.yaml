@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: pg-benchmark
+    platform: linux/amd64 
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    networks:
+      - benchnet
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+networks:
+  benchnet:
+    driver: bridge
