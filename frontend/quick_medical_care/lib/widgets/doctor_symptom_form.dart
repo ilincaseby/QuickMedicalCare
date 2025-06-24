@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
-import 'form_styles.dart'; // asigură-te că e calea corectă
+import 'form_styles.dart';
+import 'package:quick_medical_care/widgets/snack_bar_error.dart';
+import '../utils/models.dart' as models;
+import '../utils/http_request.dart' as reqClient;
+import '../utils/secure_data.dart' as secureStorageClient;
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:quick_medical_care/screens/diagnosis_page.dart';
 
 class DoctorSymptomForm extends StatefulWidget {
   const DoctorSymptomForm({super.key});
@@ -20,14 +26,60 @@ class _DoctorSymptomFormState extends State<DoctorSymptomForm> {
     super.dispose();
   }
 
+  String path = 'api/v1/prognosis/predict';
+
+  Future<models.RequestResponse> _requestDiagnosis(
+      String message, String sex, int age) async {
+    var antiCsrfToken = await secureStorageClient.get("antiCsrfToken");
+    var accessToken = await secureStorageClient.get("access-token");
+    return reqClient.request(
+      models.RequestMethod.post,
+      path,
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": antiCsrfToken,
+        "Authorization": "Bearer ${accessToken ?? ''}",
+      },
+      body: {
+        'message': message,
+        'age': age,
+        'sex': sex,
+      },
+    );
+  }
+
   void _handleDiagnosis() {
-    final age = _ageController.text.trim();
+    final int? age = int.tryParse(_ageController.text);
+    if (age == null) {
+      showError(context, "Age not completed");
+      return;
+    }
+    final String sex = _selectedSex == 1 ? 'M' : 'F';
     final symptoms = _symptomController.text.trim();
 
-    // Afișare pentru test
-    print("Symptoms: $symptoms");
-    print("Age: $age");
-    print("Sex: ${_selectedSex == 1 ? 'Male' : 'Female'} ($_selectedSex)");
+    context.loaderOverlay.show();
+    _requestDiagnosis(symptoms, sex, age).then((response) {
+      context.loaderOverlay.hide();
+      if (response.statusCode == 200) {
+        String diagnosisText = response.body!['diagnosis'] ?? '';
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    DiagnosisPage(diagnosisText: diagnosisText)));
+        return;
+      }
+      if (response.statusCode == 404) {
+        showError(context, 'User or personal data could not be found');
+        return;
+      }
+      if (response.statusCode == 500) {
+        showError(context, 'AI/ML models malfunction or not enough symptoms');
+        return;
+      }
+    }).catchError((error) {
+      showError(context, 'Something went wrong');
+    });
   }
 
   @override

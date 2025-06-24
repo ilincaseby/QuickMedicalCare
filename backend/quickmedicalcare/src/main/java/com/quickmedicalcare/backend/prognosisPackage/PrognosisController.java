@@ -48,7 +48,15 @@ public class PrognosisController {
         List<Roles> mutableRoles = new ArrayList<>(userRoles);
         mutableRoles.sort(Comparator.comparingInt(Roles::getPriority));
         Roles userRole = mutableRoles.get(userRoles.size() - 1);
-        JsonNode prognosisWProbs = userRole.accept(roleVisitor, prognosisPayload, privateData.getAge(), privateData.getSex() == 1 ? "M" : "F");
+        int age = privateData.getAge();
+        if (prognosisPayload.getAge() != 0) {
+            age = prognosisPayload.getAge();
+        }
+        String sex = privateData.getSex() == 1 ? "M" : "F";
+        if (!prognosisPayload.getSex().equals("")) {
+            sex = prognosisPayload.getSex();
+        }
+        JsonNode prognosisWProbs = userRole.accept(roleVisitor, prognosisPayload, age, sex);
         if (prognosisWProbs == null) {
             return ResponseEntity.status(500).body("Could not get any prognosis due to AI/ML servers malfunction");
         }

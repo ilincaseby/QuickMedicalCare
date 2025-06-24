@@ -33,11 +33,11 @@ def obtain_prognosis():
     for k, v in disease_encoding.items():
         if v == max_index:
             prognosis = k
-    return jsonify({'response': f'{prognosis} probability {np.max(max_probabilities)}'})
+    return jsonify({'response': f'{prognosis}', 'probability': f'{np.max(max_probabilities)}'})
 
 
 if __name__ == "__main__":
-    model = load("mlpPrognosisModel.joblib")
+    model = load("./mlpPrognosisModel.joblib")
     symptoms_encoding = {}
     disease_encoding = {}
     with open("symptoms_index_encoding.json", "r") as f:

@@ -11,4 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PrognosisPayload {
     private String message;
+    private int age;
+    private String sex;
 }

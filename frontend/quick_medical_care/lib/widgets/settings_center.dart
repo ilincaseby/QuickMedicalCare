@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quick_medical_care/screens/change_data_page.dart';
 import 'package:quick_medical_care/screens/change_password_page.dart';
+import 'package:quick_medical_care/screens/upgrade_role_page.dart';
 
 class SettingCenter extends StatefulWidget {
   const SettingCenter({
@@ -20,6 +21,11 @@ class _SettingCenterState extends State<SettingCenter> {
   void _handleChangePassword() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const ChangePasswordPage()));
+  }
+
+  void _handleUpgradeRole() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const UpgradeRolePage()));
   }
 
   @override
@@ -52,6 +58,21 @@ class _SettingCenterState extends State<SettingCenter> {
           ),
           child: const Text(
             'Change Password',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _handleUpgradeRole,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.teal.shade600,
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          child: const Text(
+            'Upgrade Role',
             style: TextStyle(fontSize: 18),
           ),
         ),

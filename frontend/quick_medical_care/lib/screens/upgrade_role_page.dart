@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
-import '../widgets/login_header.dart';
-import '../widgets/register_form.dart';
-import '../widgets/change_data_form.dart';
-import '../widgets/diagnosis_widget.dart';
-import '../widgets/login_footer.dart';
+import 'package:quick_medical_care/widgets/login_header.dart';
+import 'package:quick_medical_care/widgets/upgrade_role_center.dart';
 
-class DiagnosisPage extends StatelessWidget {
-  final String diagnosisText;
-  final List<MapEntry<String, double>>? differentialDiagnosis;
-
-  const DiagnosisPage({
-    super.key,
-    required this.diagnosisText,
-    this.differentialDiagnosis,
-  });
+class UpgradeRolePage extends StatelessWidget {
+  const UpgradeRolePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +24,7 @@ class DiagnosisPage extends StatelessWidget {
             const Spacer(),
             const LoginHeader(),
             const SizedBox(height: 40),
-            DiagnosisWidget(
-              diagnosisText: diagnosisText,
-              differentialDiagnosis: differentialDiagnosis,
-              // differentialDiagnosis: [
-              //   MapEntry("COPD", 0.25),
-              //   MapEntry("Bronchitis", 0.15),
-              //   MapEntry("Pneumonia", 0.10),
-              // ],
-            ),
+            UpgradeRoleCenter(),
             const Spacer(),
             // const LoginFooter(),
             // const SizedBox(height: 20),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:quick_medical_care/screens/doctor_homepage.dart';
 import 'package:quick_medical_care/screens/user_homepage.dart';
 import 'package:quick_medical_care/widgets/snack_bar_error.dart';
@@ -16,6 +17,18 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Afișează loaderul după ce e gata overlay-ul
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        //context.loaderOverlay.show(); // sau hide(), cum vrei
+      }
+    });
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -71,12 +84,10 @@ class _LoginFormState extends State<LoginForm> {
               "refresh-token", response.body?["refresh-token"]);
           if (role != "ROLE_DOCTOR") {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const UserHomepage()));
+                MaterialPageRoute(builder: (context) => UserHomepage()));
           } else {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const DoctorHomepage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => DoctorHomepage()));
           }
           return;
         }

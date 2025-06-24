@@ -81,8 +81,10 @@ public class AuthenticationServiceController {
         if (desiredRole == null) {
             return new ResponseEntity<>("Invalid role", HttpStatus.BAD_REQUEST);
         }
-        if (userRoles.contains(desiredRole)) {
-            return ResponseEntity.status(409).body("Specified role already exists for user");
+        userRoles.sort(Comparator.comparingInt(Roles::getPriority));
+        Roles userRole = userRoles.get(userRoles.size() - 1);
+        if (userRoles.contains(desiredRole) || userRole.getPriority() > desiredRole.getPriority()) {
+            return ResponseEntity.status(409).body("Specified role already exists for user or user has a better role already");
         }
         HttpStatus setRoleCode = superTokensAPI.setRole(SecurityContextHolder.getContext().getAuthentication().getName(),
                 upgradeRole);
