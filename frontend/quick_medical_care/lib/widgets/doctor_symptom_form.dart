@@ -6,6 +6,7 @@ import '../utils/http_request.dart' as reqClient;
 import '../utils/secure_data.dart' as secureStorageClient;
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:quick_medical_care/screens/diagnosis_page.dart';
+import 'dart:math';
 
 class DoctorSymptomForm extends StatefulWidget {
   const DoctorSymptomForm({super.key});
@@ -62,11 +63,24 @@ class _DoctorSymptomFormState extends State<DoctorSymptomForm> {
       context.loaderOverlay.hide();
       if (response.statusCode == 200) {
         String diagnosisText = response.body!['diagnosis'] ?? '';
+        List<MapEntry<String, double>>? differentialDiagnosis;
+        if ((response.body!["differential_diagnosis"] as List).isNotEmpty) {
+          differentialDiagnosis = (response.body!["differential_diagnosis"]
+                  as List)
+              .map<MapEntry<String, double>>((aux) => MapEntry<String, double>(
+                  aux[0] as String, (aux[1] as num).toDouble()))
+              .toList();
+          differentialDiagnosis.removeRange(
+              min(3, differentialDiagnosis.length),
+              differentialDiagnosis.length);
+        }
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    DiagnosisPage(diagnosisText: diagnosisText)));
+                builder: (context) => DiagnosisPage(
+                      diagnosisText: diagnosisText,
+                      differentialDiagnosis: differentialDiagnosis,
+                    )));
         return;
       }
       if (response.statusCode == 404) {

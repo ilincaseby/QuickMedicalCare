@@ -28,6 +28,7 @@ app = Flask(__name__)
 def classify():
     data = request.get_json(force=True)
     message = data['message']
+    # response = ["E_53","E_97","E_65","E_9","E_88","E_151","E_212","E_175","E_20","E_56_@_7","E_152_@_V_26"]
     response = []
     no_values_data_keys_list = list(no_values_data.keys())
     n = int(len(no_values_data_keys_list) / 50)

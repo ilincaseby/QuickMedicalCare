@@ -83,11 +83,15 @@ class _LoginFormState extends State<LoginForm> {
           secureStorageClient.save(
               "refresh-token", response.body?["refresh-token"]);
           if (role != "ROLE_DOCTOR") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => UserHomepage()));
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => UserHomepage()),
+                (route) => false);
           } else {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => DoctorHomepage()));
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => DoctorHomepage()),
+                (route) => false);
           }
           return;
         }
