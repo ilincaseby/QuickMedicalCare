@@ -36,7 +36,7 @@ def obtain_conditions():
     patient_features[1] = patient_sex
     for patient_evidence in patient_evidences:
         if patient_evidence in evidences_dict:
-            patient_features[evidences_dict[patient_evidence]] = 1
+            patient_features[2 + evidences_dict[patient_evidence]] = 1
     # y_pred = np.argmax(model.predict(np.array(patient_features)))[0]
     y_pred = np.argmax(model.predict(np.array([patient_features])), axis=1)[0]
     diagnosis = conditions_dict_index[y_pred]

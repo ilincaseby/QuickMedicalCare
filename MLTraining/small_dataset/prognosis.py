@@ -17,11 +17,12 @@ def obtain_prognosis():
             symptoms_arr[index] = 1
     symptoms_arr = symptoms_arr.reshape(1, -1)
     result = model.predict_proba(symptoms_arr)
+
     index_disease = -1
     val = 0
-    max_probabilities = [prob[0][0] for prob in result]
-
+    max_probabilities = [prob[0][1] for prob in result]
     max_index = np.argmax(max_probabilities)
+
 
     # for i in range(0, len(result[0])):
     #     if result[0][i] > val:

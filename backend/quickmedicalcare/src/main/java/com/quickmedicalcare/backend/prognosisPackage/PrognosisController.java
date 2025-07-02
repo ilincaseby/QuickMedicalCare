@@ -53,7 +53,7 @@ public class PrognosisController {
             age = prognosisPayload.getAge();
         }
         String sex = privateData.getSex() == 1 ? "M" : "F";
-        if (!prognosisPayload.getSex().equals("")) {
+        if (prognosisPayload.getSex() == null || !prognosisPayload.getSex().equals("")) {
             sex = prognosisPayload.getSex();
         }
         JsonNode prognosisWProbs = userRole.accept(roleVisitor, prognosisPayload, age, sex);
